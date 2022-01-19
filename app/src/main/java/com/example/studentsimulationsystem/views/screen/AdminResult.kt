@@ -143,6 +143,7 @@ fun AdminResult(adminViewModel: AdminViewModel = hiltViewModel()) {
             }
 
         }
+
         Column(
             modifier = Modifier
                 .weight(0.6f)
