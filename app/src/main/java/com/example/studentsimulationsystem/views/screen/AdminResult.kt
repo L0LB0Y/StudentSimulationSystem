@@ -28,10 +28,11 @@ import com.example.studentsimulationsystem.ui.theme.spacing
 import com.example.studentsimulationsystem.viewmodel.AdminViewModel
 
 @Composable
-fun AdminResult(adminViewModel: AdminViewModel = hiltViewModel()) {
+fun AdminResult(adminViewModel: AdminViewModel) {
     var isClicked by remember {
         mutableStateOf(false)
     }
+
     Column(
         Modifier
             .fillMaxSize()

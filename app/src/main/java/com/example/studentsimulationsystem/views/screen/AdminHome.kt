@@ -26,7 +26,10 @@ import com.example.studentsimulationsystem.ui.theme.spacing
 import com.example.studentsimulationsystem.viewmodel.AdminViewModel
 
 @Composable
-fun AdminHome(adminViewModel: AdminViewModel = hiltViewModel()) {
+fun AdminHome(adminViewModel: AdminViewModel) {
+    LaunchedEffect(key1 = true ){
+        adminViewModel.getListOfStudent()
+    }
     Column(
         Modifier
             .fillMaxSize()

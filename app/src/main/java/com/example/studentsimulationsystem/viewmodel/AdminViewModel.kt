@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studentsimulationsystem.model.Student
+import com.example.studentsimulationsystem.model.Subject
 import com.example.studentsimulationsystem.repository.AdminRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,10 +24,8 @@ class AdminViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    init {
-        getAllStudent()
-    }
 
+    var isLoading = mutableStateOf(false)
     private var _students = MutableLiveData<List<Student>>()
     val students: LiveData<List<Student>> = _students
 
@@ -64,5 +64,74 @@ class AdminViewModel @Inject constructor(
                 ).show()
             }
         }
+    }
+
+    fun insertStudentInServer(
+        studentName: String,
+        studentID: String,
+        database: String,
+        ai: String,
+        network: String,
+        programming: String,
+        dataStructure: String,
+        onInsertComplete: () -> Unit
+    ) {
+        val checkIfInputsWasCorrect =
+            checkInputs(studentName, studentID, database, ai, network, programming, dataStructure)
+        if (checkIfInputsWasCorrect)
+            viewModelScope.launch {
+                isLoading.value = true
+                val subjects = listOf(
+                    Subject(subjectName = "database", subjectDegree = database),
+                    Subject(subjectName = "ai", subjectDegree = ai),
+                    Subject(subjectName = "network", subjectDegree = network),
+                    Subject(subjectName = "programming", subjectDegree = programming),
+                    Subject(subjectName = "dataStructure", subjectDegree = dataStructure),
+                )
+                val student =
+                    Student(studentID = studentID, studentName = studentName, subject = subjects)
+                kotlin.runCatching {
+                    adminRepository.insertStudentInServer(student)
+                }.onSuccess {
+                    if (it.trim() == "1") {
+                        Toast.makeText(
+                            context,
+                            "Student Added Successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        isLoading.value = false
+                        onInsertComplete()
+                    }
+                }.onFailure {
+                    Toast.makeText(
+                        context,
+                        "Error Or Failure Check Server Response",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        else
+            Toast.makeText(
+                context,
+                "Please Fill The Form Correctly",
+                Toast.LENGTH_SHORT
+            ).show()
+    }
+
+    private fun checkInputs(
+        studentName: String,
+        studentID: String,
+        database: String,
+        ai: String,
+        network: String,
+        programming: String,
+        dataStructure: String,
+    ) =
+        studentID.isNotBlank() && studentName.isNotBlank()
+                && dataStructure.isNotBlank() && ai.isNotBlank()
+                && database.isNotBlank() && network.isNotBlank() && programming.isNotBlank()
+
+    fun getListOfStudent() {
+        getAllStudent()
     }
 }
