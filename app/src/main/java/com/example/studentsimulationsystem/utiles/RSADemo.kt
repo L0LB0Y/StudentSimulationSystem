@@ -22,7 +22,7 @@ class RSADemo {
     companion object {
         // convert String publicKey to Key object
         @Throws(GeneralSecurityException::class, IOException::class)
-        fun loadPublicKey(stored: String): Key {
+        private fun loadPublicKey(stored: String): Key {
             val data: ByteArray = Base64.getDecoder().decode(stored.toByteArray())
             val spec = X509EncodedKeySpec(data)
             val fact = KeyFactory.getInstance("RSA")
@@ -34,11 +34,7 @@ class RSADemo {
         fun encryptMessage(plainText: String, publicKey: String): String {
             val cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding")
             cipher.init(Cipher.ENCRYPT_MODE, loadPublicKey(publicKey))
-            return Base64.getEncoder().encodeToString(
-                cipher.doFinal
-
-                    (plainText.toByteArray())
-            )
+            return Base64.getEncoder().encodeToString(cipher.doFinal(plainText.toByteArray()))
         }
 
         // Decrypt using private key
@@ -54,7 +50,7 @@ class RSADemo {
 
         // Convert String private key to privateKey object
         @Throws(GeneralSecurityException::class)
-        fun loadPrivateKey(key64: String): PrivateKey {
+        private fun loadPrivateKey(key64: String): PrivateKey {
             val clear: ByteArray = Base64.getDecoder().decode(key64.toByteArray())
             val keySpec = PKCS8EncodedKeySpec(clear)
             val fact = KeyFactory.getInstance("RSA")

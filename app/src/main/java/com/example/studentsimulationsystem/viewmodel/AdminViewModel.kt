@@ -2,8 +2,10 @@ package com.example.studentsimulationsystem.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,12 +14,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.studentsimulationsystem.model.Student
 import com.example.studentsimulationsystem.model.Subject
 import com.example.studentsimulationsystem.repository.AdminRepository
+import com.example.studentsimulationsystem.utiles.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @SuppressLint("StaticFieldLeak")
 @HiltViewModel
+@RequiresApi(Build.VERSION_CODES.O)
 class AdminViewModel @Inject constructor(
     private val adminRepository: AdminRepository,
     private val context: Context
@@ -66,6 +70,7 @@ class AdminViewModel @Inject constructor(
         }
     }
 
+
     fun insertStudentInServer(
         studentName: String,
         studentID: String,
@@ -89,7 +94,7 @@ class AdminViewModel @Inject constructor(
                     Subject(subjectName = "dataStructure", subjectDegree = dataStructure),
                 )
                 val student =
-                    Student(studentID = studentID, studentName = studentName, subject = subjects)
+                    Constant.encryptStudent(Student(studentID = studentID, studentName = studentName, subject = subjects))
                 kotlin.runCatching {
                     adminRepository.insertStudentInServer(student)
                 }.onSuccess {
