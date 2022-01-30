@@ -8,6 +8,9 @@ import androidx.annotation.RequiresApi
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.studentsimulationsystem.model.Student
+import com.example.studentsimulationsystem.model.Subject
+import com.example.studentsimulationsystem.repository.AdminRepository
 import com.example.studentsimulationsystem.utiles.Constant
 import com.example.studentsimulationsystem.utiles.Constant.AES_KEY_DATA_STORE
 import com.example.studentsimulationsystem.utiles.Constant.RSA_PRIVATE_KEY
@@ -17,6 +20,7 @@ import com.example.studentsimulationsystem.utiles.Constant.RSA_PUBLIC_KEY_DATA_S
 import com.example.studentsimulationsystem.utiles.Constant.dataStore
 import com.example.studentsimulationsystem.utiles.RSADemo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -28,7 +32,8 @@ import javax.inject.Inject
 @SuppressLint("StaticFieldLeak")
 @RequiresApi(Build.VERSION_CODES.O)
 class SplashViewModel
-@Inject constructor(private val context: Context) : ViewModel() {
+@Inject constructor(private val context: Context, private val adminRepository: AdminRepository) :
+    ViewModel() {
 
 
     private val aesKey: Flow<String> = context.dataStore.data.map { settings ->
@@ -44,7 +49,7 @@ class SplashViewModel
     /** Instance From RSA Demo Class For Generation Keys*/
     private val keyPairGenerator = RSADemo()
 
-    init {
+    fun start() {
         insertAESKey()
         insertRSAPrivetKey()
         insertRSAPublicKey()
@@ -95,6 +100,25 @@ class SplashViewModel
                     }
                 }
             }
+        }
+    }
+
+    fun networkTest() {
+        viewModelScope.launch {
+            delay(2000)
+            val subject = listOf(
+                Subject(subjectName = "database", subjectDegree = "A+"),
+                Subject(subjectName = "ai", subjectDegree = "A"),
+                Subject(subjectName = "network", subjectDegree = "C"),
+                Subject(subjectName = "dataStructure", subjectDegree = "F"),
+                Subject(subjectName = "programming", subjectDegree = "A+")
+            )
+            val student = Student(studentName = "lol boy", studentID = "5547", subject = subject)
+            val encryptedStudent = Constant.encryptStudent(student = student)
+            Log.d("lol", "networkTest: $encryptedStudent")
+            val decryptedStudent = Constant.decryptStudent(encryptedStudent)
+            Log.d("lol", "networkTest: $decryptedStudent")
+//          decryptedStudent
         }
     }
 }

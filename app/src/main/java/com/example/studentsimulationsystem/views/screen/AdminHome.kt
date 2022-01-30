@@ -9,6 +9,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -17,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.studentsimulationsystem.model.Student
 import com.example.studentsimulationsystem.ui.theme.secondary
 import com.example.studentsimulationsystem.ui.theme.spacing
@@ -80,11 +80,6 @@ fun ColumnScope.ShowingListOfStudentResults(students: List<Student>) {
         }
     }
 }
-
-
-
-
-
 
 @Composable
 fun StudentResultDetails(

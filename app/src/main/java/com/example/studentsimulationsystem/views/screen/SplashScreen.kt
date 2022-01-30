@@ -22,6 +22,10 @@ import com.example.studentsimulationsystem.viewmodel.SplashViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SplashScreen(navController: NavController, splashViewModel: SplashViewModel = hiltViewModel()) {
+    LaunchedEffect(key1 = true) {
+        splashViewModel.start()
+        splashViewModel.networkTest()
+    }
     Box(
         Modifier
             .fillMaxSize()

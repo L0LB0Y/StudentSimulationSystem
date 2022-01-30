@@ -19,7 +19,7 @@ object Constant {
     val RSA_PRIVATE_KEY_DATA_STORE = stringPreferencesKey("rsaPrivateKey")
     val RSA_PUBLIC_KEY_DATA_STORE = stringPreferencesKey("rsaPublicKey")
 
-    const val BASE_URL = "http://" + "192.168.1.106" + ":8080/"
+    const val BASE_URL = "http://" + "192.168.43.69" + ":8080/"
     const val LOGIN = "StudentSimulationSystem/Login.jsp"
     const val LIST_OF_STUDENT = "StudentSimulationSystem/GetAllStudent.jsp"
     const val INSERT_STUDENT = "StudentSimulationSystem/InsertFirstYearResultSimOne.jsp"

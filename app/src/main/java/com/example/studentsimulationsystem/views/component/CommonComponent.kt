@@ -7,16 +7,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -59,7 +59,6 @@ fun ShowDialog() {
         }
     }
 }
-
 
 
 @Composable
@@ -137,4 +136,38 @@ fun SemesterOrYearCard(
             )
         }
     }
+}
+
+
+@Composable
+fun CustomTextField(
+    modifier: Modifier = Modifier,
+    textTitle: String,
+    value: String,
+    onValueChange: (newValue: String) -> Unit
+) {
+    TextField(
+        modifier = modifier
+            .height(TextFieldDefaults.MinHeight),
+        value = value,
+        onValueChange = {
+            onValueChange(it)
+        },
+        textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
+        label = {
+            Text(
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
+                text = textTitle,
+                fontSize = 16.sp, color = Color(0xFFaaaaaa)
+            )
+        },
+        singleLine = true,
+        shape = RoundedCornerShape(8.dp),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color(0xFFebebeb),
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent
+        ),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+    )
 }
