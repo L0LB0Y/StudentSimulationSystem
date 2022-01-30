@@ -22,15 +22,25 @@ class AdminViewModel @Inject constructor(
 ) :
     ViewModel() {
 
+    /** For List Of Student*/
+    private var _students = MutableLiveData<List<Student>>()
+    val students: LiveData<List<Student>> = _students
+
+    /** For One Student Object */
+    private var _student = MutableLiveData<Student>()
+    val student: LiveData<Student> = _student
+
+    /** List Of Years*/
+    val years =
+        listOf("First Year", "Second Year", "Third Year", "Fourth Year", "Fifth Year")
+
+    /** List Of Semester*/
+    val semester = listOf("Semester One", "Semester Tow")
+
     init {
         getAllStudent()
     }
 
-    private var _students = MutableLiveData<List<Student>>()
-    val students: LiveData<List<Student>> = _students
-
-    private var _student = MutableLiveData<Student>()
-    val student: LiveData<Student> = _student
     private fun getAllStudent() {
         viewModelScope.launch {
             kotlin.runCatching {

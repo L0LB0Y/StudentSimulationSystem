@@ -1,18 +1,13 @@
 package com.example.studentsimulationsystem.views.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +21,8 @@ import com.example.studentsimulationsystem.model.Student
 import com.example.studentsimulationsystem.ui.theme.secondary
 import com.example.studentsimulationsystem.ui.theme.spacing
 import com.example.studentsimulationsystem.viewmodel.AdminViewModel
+import com.example.studentsimulationsystem.views.component.StudentSemesterRow
+import com.example.studentsimulationsystem.views.component.StudentYearsRow
 
 @Composable
 fun AdminResult(adminViewModel: AdminViewModel = hiltViewModel()) {
@@ -38,111 +35,25 @@ fun AdminResult(adminViewModel: AdminViewModel = hiltViewModel()) {
             .padding(MaterialTheme.spacing.medium),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
     ) {
-        Column(
-            modifier = Modifier
-                .weight(0.2f)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-        ) {
-            Text(
-                text = "Select Students Year",
-                fontSize = 16.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold
-            )
-            val years =
-                listOf("First Year", "Second Year", "Third Year", "Fourth Year", "Fifth Year")
-            var selectedYears by remember {
-                mutableStateOf("First Year")
-            }
-            LazyRow(
-                Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-            ) {
-                items(years) { year ->
-                    Card(
-                        Modifier
-                            .height(70.dp)
-                            .width(100.dp)
-                            .border(
-                                width = 2.dp,
-                                color = if (selectedYears == year) secondary else Color.Transparent,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .clickable {
-                                selectedYears = year
 
-                            },
-                        shape = RoundedCornerShape(12.dp),
-                        backgroundColor = if (selectedYears == year) Color(0xFF8ECBE2) else
-                            Color(0xFFAFD5E4)
-                    ) {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(
-                                text = year,
-                                fontSize = 14.sp,
-                                color = if (selectedYears == year) Color.White else secondary,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        Text(
+            text = "Select Students Year",
+            fontSize = 16.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Bold
+        )
 
-        Column(
-            modifier = Modifier
-                .weight(0.2f)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-        ) {
-            Text(
-                text = "Chose Semester",
-                fontSize = 16.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold
-            )
-            Row(
-                Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-            ) {
-                val semester = listOf("Semester One", "Semester Tow")
-                var selectedSemester by remember {
-                    mutableStateOf("Semester One")
-                }
-                semester.forEach {
-                    Card(
-                        Modifier
-                            .height(70.dp)
-                            .weight(1f)
-                            .border(
-                                width = 2.dp,
-                                color = if (selectedSemester == it) secondary else Color.Transparent,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .clickable {
-                                selectedSemester = it
+        val years = adminViewModel.years
+        StudentYearsRow(years)
 
-                            },
-                        shape = RoundedCornerShape(12.dp),
-                        backgroundColor = if (selectedSemester == it) Color(0xFF8ECBE2) else
-                            Color(0xFFAFD5E4)
-                    ) {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(
-                                text = it,
-                                fontSize = 14.sp,
-                                color = if (selectedSemester == it) Color.White else secondary,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-
-
-            }
-
-        }
+        Text(
+            text = "Chose Semester",
+            fontSize = 16.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Bold
+        )
+        val semester = adminViewModel.semester
+        StudentSemesterRow(semester)
 
         Column(
             modifier = Modifier
@@ -221,9 +132,8 @@ fun InsetStudentResultDetails(student: Student) {
     Card(
         Modifier
             .fillMaxWidth()
-            .padding(
-                bottom = MaterialTheme.spacing.small
-            ), shape = RoundedCornerShape(MaterialTheme.spacing.extraSmall), elevation = 5.dp
+            .padding(bottom = MaterialTheme.spacing.small),
+        shape = RoundedCornerShape(MaterialTheme.spacing.extraSmall), elevation = 5.dp
     ) {
         Column {
             Row(
