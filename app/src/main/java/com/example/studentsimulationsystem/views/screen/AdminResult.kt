@@ -25,10 +25,11 @@ import com.example.studentsimulationsystem.views.component.StudentSemesterRow
 import com.example.studentsimulationsystem.views.component.StudentYearsRow
 
 @Composable
-fun AdminResult(adminViewModel: AdminViewModel = hiltViewModel()) {
+fun AdminResult(adminViewModel: AdminViewModel) {
     var isClicked by remember {
         mutableStateOf(false)
     }
+
     Column(
         Modifier
             .fillMaxSize()

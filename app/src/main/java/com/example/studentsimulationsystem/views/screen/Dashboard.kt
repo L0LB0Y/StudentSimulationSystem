@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,6 +33,7 @@ import com.example.studentsimulationsystem.ui.theme.primary
 import com.example.studentsimulationsystem.ui.theme.secondary
 import com.example.studentsimulationsystem.ui.theme.spacing
 import com.example.studentsimulationsystem.utiles.TypeOfUser
+import com.example.studentsimulationsystem.viewmodel.AdminViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -75,6 +77,9 @@ fun Dashboard(ParentNavController: NavController) {
                             if (navController.currentBackStackEntry?.id != "StudentHome")
                                 navController.navigate("StudentHome")
                     }
+                    "Add New Student" -> {
+                        navController.navigate("AddNewStudent")
+                    }
                     else ->
                         Toast.makeText(context, "Soon !!", Toast.LENGTH_SHORT).show()
                 }
@@ -85,6 +90,7 @@ fun Dashboard(ParentNavController: NavController) {
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerShape = RoundedCornerShape(size = MaterialTheme.spacing.default)
     ) {
+        val adminViewModel: AdminViewModel = hiltViewModel()
         val startDestination = if (TypeOfUser.UserType == "Admin") "AdminHome" else "StudentHome"
         NavHost(navController = navController, startDestination = startDestination) {
             composable("StudentHome") {
@@ -94,10 +100,13 @@ fun Dashboard(ParentNavController: NavController) {
                 StudentResult()
             }
             composable("AdminHome") {
-                AdminHome()
+                AdminHome(adminViewModel)
             }
             composable("AdminResult") {
-                AdminResult()
+                AdminResult(adminViewModel)
+            }
+            composable("AddNewStudent") {
+                AddNewStudent(adminViewModel)
             }
         }
     }
@@ -208,7 +217,20 @@ fun ColumnScope.DrawerContent(onDrawerClicked: (selectedText: String) -> Unit) {
     var selectedText by remember {
         mutableStateOf("Home")
     }
-    val category = listOf("Home", "User Profile", "Result", "Settings", "Logout")
+    val category = if (TypeOfUser.UserType == "Admin") listOf(
+        "Home",
+        "User Profile",
+        "Result",
+        "Add New Student",
+        "Settings",
+        "Logout"
+    ) else listOf(
+        "Home",
+        "User Profile",
+        "Result",
+        "Settings",
+        "Logout"
+    )
     Column(
         Modifier
             .fillMaxWidth()

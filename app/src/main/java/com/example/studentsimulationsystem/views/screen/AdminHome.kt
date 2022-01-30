@@ -26,7 +26,10 @@ import com.example.studentsimulationsystem.views.component.StudentSemesterRow
 import com.example.studentsimulationsystem.views.component.StudentYearsRow
 
 @Composable
-fun AdminHome(adminViewModel: AdminViewModel = hiltViewModel()) {
+fun AdminHome(adminViewModel: AdminViewModel) {
+    LaunchedEffect(key1 = true ){
+        adminViewModel.getListOfStudent()
+    }
     Column(
         Modifier
             .fillMaxSize()
