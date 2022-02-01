@@ -1,6 +1,7 @@
 package com.example.studentsimulationsystem.api
 
 import com.example.studentsimulationsystem.model.Student
+import com.example.studentsimulationsystem.model.Subject
 import com.example.studentsimulationsystem.utiles.Constant
 import com.google.gson.Gson
 import io.ktor.client.*
@@ -52,9 +53,21 @@ class ApiClientImplementation @Inject constructor(private val httpClient: HttpCl
 
     suspend fun testServer(): String {
         return try {
-            val url = Constant.BASE_URL + "index.jsp"
-            val response = httpClient.post<String>(url){
-                parameter("lol","lol d boy")
+            val url = Constant.BASE_URL + "StudentSimulationSystem/index.jsp"
+            val subject = listOf(
+                Subject(subjectName = "database", subjectDegree = "A+"),
+                Subject(subjectName = "ai", subjectDegree = "A"),
+                Subject(subjectName = "network", subjectDegree = "C"),
+                Subject(subjectName = "dataStructure", subjectDegree = "F"),
+                Subject(subjectName = "programming", subjectDegree = "A+")
+            )
+            val student = Student(studentName = "lol boy", studentID = "5547", subject = subject)
+            val encryptedStudent = Constant.encryptStudent(student = student)
+            val decryptedStudent = Constant.decryptStudent(encryptedStudent)
+            val gson = Gson()
+            val response = httpClient.post<String>(url) {
+                contentType(ContentType.Application.Json)
+                body = gson.toJson(encryptedStudent)
             }
             response
         } catch (ex: Exception) {

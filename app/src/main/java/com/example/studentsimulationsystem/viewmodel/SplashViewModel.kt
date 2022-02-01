@@ -3,13 +3,10 @@ package com.example.studentsimulationsystem.viewmodel
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.studentsimulationsystem.model.Student
-import com.example.studentsimulationsystem.model.Subject
 import com.example.studentsimulationsystem.repository.AdminRepository
 import com.example.studentsimulationsystem.utiles.Constant
 import com.example.studentsimulationsystem.utiles.Constant.AES_KEY_DATA_STORE
@@ -20,7 +17,6 @@ import com.example.studentsimulationsystem.utiles.Constant.RSA_PUBLIC_KEY_DATA_S
 import com.example.studentsimulationsystem.utiles.Constant.dataStore
 import com.example.studentsimulationsystem.utiles.RSADemo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -38,8 +34,7 @@ class SplashViewModel
 
     init {
         viewModelScope.launch {
-            val test = adminRepository.getTstFromServer()
-            Timber.d("lol $test")
+
         }
     }
 
@@ -67,13 +62,11 @@ class SplashViewModel
             rsaPublicKey.collect { value ->
                 if (value.isNotEmpty()) {
                     RSA_PUBLIC_KEY = value
-                    Log.d("lol", "RSA_PUBLIC_KEY insert: $value")
                 } else {
                     context.dataStore.edit { setting ->
                         setting[RSA_PUBLIC_KEY_DATA_STORE] =
                             Base64.getEncoder().encodeToString(keyPairGenerator.publicKey.encoded)
                     }
-                    Log.d("lol", "RSA_PUBLIC_KEY not insert: $value")
                 }
             }
         }
@@ -84,13 +77,11 @@ class SplashViewModel
             rsaPrivateKey.collect { value ->
                 if (value.isNotEmpty()) {
                     RSA_PRIVATE_KEY = value
-                    Log.d("lol", "RSA_PRIVATE_KEY insert: $value")
                 } else {
                     context.dataStore.edit { setting ->
                         setting[RSA_PRIVATE_KEY_DATA_STORE] =
                             Base64.getEncoder().encodeToString(keyPairGenerator.privateKey.encoded)
                     }
-                    Log.d("lol", "RSA_PRIVATE_KEY not insert: $value")
                 }
             }
         }

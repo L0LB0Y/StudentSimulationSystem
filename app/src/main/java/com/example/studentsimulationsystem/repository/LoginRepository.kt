@@ -8,5 +8,5 @@ class LoginRepository @Inject constructor(private val apiClientImplementation: A
     suspend fun checkStudentLogin(studentPassword: String) =
         apiClientImplementation.checkStudentLogin(studentPassword)
 
-    suspend fun insertTest(student: Student) = apiClientImplementation.insertFirstYearResultSimOne(student)
+    suspend fun test() = apiClientImplementation.testServer()
 }
