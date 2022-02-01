@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -62,10 +63,9 @@ fun ShowDialog() {
 
 
 @Composable
-fun ColumnScope.StudentSemesterRow(semesters: List<String>) {
+fun StudentSemesterRow(semesters: List<String>) {
     Row(
         Modifier
-            .weight(0.2f)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
     ) {
@@ -84,13 +84,12 @@ fun ColumnScope.StudentSemesterRow(semesters: List<String>) {
 }
 
 @Composable
-fun ColumnScope.StudentYearsRow(years: List<String>) {
+fun StudentYearsRow(years: List<String>) {
     var selectedYears by remember {
         mutableStateOf("First Year")
     }
     LazyRow(
         Modifier
-            .weight(0.2f)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
     ) {
@@ -156,7 +155,8 @@ fun CustomTextField(
         textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
         label = {
             Text(
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
                 text = textTitle,
                 fontSize = 16.sp, color = Color(0xFFaaaaaa)
             )

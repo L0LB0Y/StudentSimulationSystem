@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -35,6 +36,12 @@ class SplashViewModel
 @Inject constructor(private val context: Context, private val adminRepository: AdminRepository) :
     ViewModel() {
 
+    init {
+        viewModelScope.launch {
+            val test = adminRepository.getTstFromServer()
+            Timber.d("lol $test")
+        }
+    }
 
     private val aesKey: Flow<String> = context.dataStore.data.map { settings ->
         settings[AES_KEY_DATA_STORE] ?: ""
@@ -100,25 +107,6 @@ class SplashViewModel
                     }
                 }
             }
-        }
-    }
-
-    fun networkTest() {
-        viewModelScope.launch {
-            delay(2000)
-            val subject = listOf(
-                Subject(subjectName = "database", subjectDegree = "A+"),
-                Subject(subjectName = "ai", subjectDegree = "A"),
-                Subject(subjectName = "network", subjectDegree = "C"),
-                Subject(subjectName = "dataStructure", subjectDegree = "F"),
-                Subject(subjectName = "programming", subjectDegree = "A+")
-            )
-            val student = Student(studentName = "lol boy", studentID = "5547", subject = subject)
-            val encryptedStudent = Constant.encryptStudent(student = student)
-            Log.d("lol", "networkTest: $encryptedStudent")
-            val decryptedStudent = Constant.decryptStudent(encryptedStudent)
-            Log.d("lol", "networkTest: $decryptedStudent")
-//          decryptedStudent
         }
     }
 }

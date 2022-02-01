@@ -12,4 +12,5 @@ class AdminRepository @Inject constructor(private val apiClientImplementation: A
 
     suspend fun insertStudentInServer(student: Student) =
         apiClientImplementation.insertFirstYearResultSimOne(student)
+    suspend fun getTstFromServer() = apiClientImplementation.testServer()
 }

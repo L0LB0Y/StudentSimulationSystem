@@ -24,7 +24,6 @@ import com.example.studentsimulationsystem.viewmodel.SplashViewModel
 fun SplashScreen(navController: NavController, splashViewModel: SplashViewModel = hiltViewModel()) {
     LaunchedEffect(key1 = true) {
         splashViewModel.start()
-        splashViewModel.networkTest()
     }
     Box(
         Modifier

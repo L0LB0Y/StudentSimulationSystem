@@ -49,4 +49,16 @@ class ApiClientImplementation @Inject constructor(private val httpClient: HttpCl
         }
 
     }
+
+    suspend fun testServer(): String {
+        return try {
+            val url = Constant.BASE_URL + "index.jsp"
+            val response = httpClient.post<String>(url){
+                parameter("lol","lol d boy")
+            }
+            response
+        } catch (ex: Exception) {
+            throw ex
+        }
+    }
 }

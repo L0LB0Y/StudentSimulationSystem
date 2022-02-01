@@ -86,10 +86,10 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:2.39.1"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-rc01'
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     // live data with compose
-    implementation 'androidx.compose.runtime:runtime-livedata:1.2.0-alpha01'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.2.0-alpha02'
 
     // Lotti file
     implementation "com.airbnb.android:lottie-compose:4.2.1"
@@ -100,4 +100,7 @@ dependencies {
 
     // GSon
     implementation 'com.google.code.gson:gson:2.8.9'
+
+    // Timber
+    implementation 'com.jakewharton.timber:timber:5.0.1'
 }

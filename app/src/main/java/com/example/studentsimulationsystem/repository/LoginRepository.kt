@@ -7,4 +7,6 @@ import javax.inject.Inject
 class LoginRepository @Inject constructor(private val apiClientImplementation: ApiClientImplementation) {
     suspend fun checkStudentLogin(studentPassword: String) =
         apiClientImplementation.checkStudentLogin(studentPassword)
+
+    suspend fun insertTest(student: Student) = apiClientImplementation.insertFirstYearResultSimOne(student)
 }

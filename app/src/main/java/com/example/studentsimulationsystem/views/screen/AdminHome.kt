@@ -91,7 +91,8 @@ fun StudentResultDetails(
             .height(300.dp)
             .padding(bottom = MaterialTheme.spacing.small),
         shape = RoundedCornerShape(MaterialTheme.spacing.extraSmall),
-        elevation = 5.dp
+        elevation = 5.dp,
+        backgroundColor = Color(0xFFE0DEDE)
     ) {
         Column {
 
