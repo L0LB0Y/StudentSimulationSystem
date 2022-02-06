@@ -64,9 +64,6 @@ fun Dashboard(ParentNavController: NavController) {
                         ParentNavController.navigate("login")
                     }
                     "Result" -> {
-                        if (TypeOfUser.UserType == "Admin")
-                            navController.navigate("AdminResult")
-                        else
                             navController.navigate("StudentResult")
                     }
                     "Home" -> {
@@ -102,9 +99,6 @@ fun Dashboard(ParentNavController: NavController) {
             composable("AdminHome") {
                 AdminHome(adminViewModel)
             }
-            composable("AdminResult") {
-                AdminResult(adminViewModel)
-            }
             composable("AddNewStudent") {
                 AddNewStudent(adminViewModel)
             }
@@ -136,8 +130,7 @@ fun DashboardTopBar(onDrawerClicked: () -> Unit) {
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = Modifier
-                .width(45.dp)
-                .height(45.dp)
+                .size(45.dp)
                 .clip(CircleShape)
                 .border(width = 1.dp, color = secondary, shape = CircleShape),
             contentScale = ContentScale.Crop,
@@ -220,7 +213,6 @@ fun ColumnScope.DrawerContent(onDrawerClicked: (selectedText: String) -> Unit) {
     val category = if (TypeOfUser.UserType == "Admin") listOf(
         "Home",
         "User Profile",
-        "Result",
         "Add New Student",
         "Settings",
         "Logout"

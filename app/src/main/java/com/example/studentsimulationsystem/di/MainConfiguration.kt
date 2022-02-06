@@ -14,16 +14,22 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import javax.inject.Singleton
 
+/** Hilt Module For Injection All Important Instances In The App*/
 @Module
 @InstallIn(SingletonComponent::class)
 object MainConfiguration {
 
-    // Provide Context Instance
+    /**
+     * This Function Will Provide Context Instance
+     **/
     @Singleton
     @Provides
     fun providesContextInstance(@ApplicationContext context: Context) = context
 
-    // Provide KTOR Instance
+    /**
+     * This Function Will Provide KTOR Instance
+     * Client Network Request
+     **/
     @Singleton
     @Provides
     fun providesKTORInstance() = HttpClient(Android) {
@@ -40,7 +46,9 @@ object MainConfiguration {
         }
     }
 
-    // Provider API Client Impl
+    /** This Function Will Provide ApiClientImplementation Instance
+     * It Contain All Functions That Should Request And Response Data From The Server
+     **/
     @Singleton
     @Provides
     fun provideAPIClientImplInstance(httpClient: HttpClient) =

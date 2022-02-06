@@ -1,9 +1,13 @@
 package com.example.studentsimulationsystem.views.screen
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,12 +67,18 @@ fun AddNewStudent(adminViewModel: AdminViewModel) {
                 )
             }
         if (showingAddScreen)
-            InsertNewStudent(adminViewModel = adminViewModel)
+            InsertNewStudent(adminViewModel = adminViewModel) {
+                showingAddScreen = !showingAddScreen
+            }
         Button(
             onClick = {
-                showingAddScreen = !showingAddScreen
-                if (buttonText == "Save Student" && showingAddScreen)
-                    adminViewModel.insertStudentInServer()
+                if (!showingAddScreen)
+                    showingAddScreen = !showingAddScreen
+                else
+                    if (buttonText == "Save Student" && showingAddScreen)
+                        adminViewModel.insertStudentInServer {
+                            showingAddScreen = !showingAddScreen
+                        }
             },
             modifier = Modifier
                 .padding(
@@ -88,11 +98,10 @@ fun AddNewStudent(adminViewModel: AdminViewModel) {
     }
 }
 
-
 @Composable
 fun ColumnScope.InsertNewStudent(
     adminViewModel: AdminViewModel,
-    mainText: String = "Add New Student"
+    mainText: String = "Add New Student", onCloseScreen: () -> Unit
 ) {
     Box(modifier = Modifier.weight(0.9f), contentAlignment = Alignment.Center) {
         Surface(
@@ -115,22 +124,37 @@ fun ColumnScope.InsertNewStudent(
                 modifier = Modifier.padding(MaterialTheme.spacing.medium),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = mainText,
-                    fontSize = 16.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
-                )
+                Box(Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = mainText,
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "",
+                        tint = secondary,
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .size(MaterialTheme.spacing.large)
+                            .clickable {
+                                onCloseScreen()
+                            }
+                    )
+                }
                 TowTextField(
                     "Student Name",
                     onTextOneStateValueChange = { adminViewModel.studentName.value = it },
                     onTextTowStateValueChange = { }, showingTextTow = false
                 )
-                TowTextField(
-                    "Student ID",
-                    onTextOneStateValueChange = { adminViewModel.studentID.value = it },
-                    onTextTowStateValueChange = { }, showingTextTow = false
-                )
+                if (mainText != "Update Student")
+                    TowTextField(
+                        "Student ID",
+                        onTextOneStateValueChange = { adminViewModel.studentID.value = it },
+                        onTextTowStateValueChange = { }, showingTextTow = false
+                    )
                 TowTextField(
                     "AI",
                     "Database",

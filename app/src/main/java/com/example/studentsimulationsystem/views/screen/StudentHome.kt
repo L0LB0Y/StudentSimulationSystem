@@ -24,6 +24,7 @@ import com.example.studentsimulationsystem.R
 import com.example.studentsimulationsystem.ui.theme.primary
 import com.example.studentsimulationsystem.ui.theme.secondary
 import com.example.studentsimulationsystem.ui.theme.spacing
+import com.example.studentsimulationsystem.utiles.TypeOfUser
 import kotlin.random.Random
 
 @Composable
@@ -144,7 +145,7 @@ fun RowScope.CardWithData(categoryName: String, progress: Float, onClick: () -> 
 }
 
 @Composable
-fun NumberOneInBox(userName: String = "Make") {
+fun NumberOneInBox(userName: String = TypeOfUser.student?.studentName ?: "Student Name") {
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)

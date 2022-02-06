@@ -97,10 +97,4 @@ dependencies {
     // Data store
     def data_store_version = "1.0.0"
     implementation "androidx.datastore:datastore-preferences:$data_store_version"
-
-    // GSon
-    implementation 'com.google.code.gson:gson:2.8.9'
-
-    // Timber
-    implementation 'com.jakewharton.timber:timber:5.0.1'
 }

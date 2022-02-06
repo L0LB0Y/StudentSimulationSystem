@@ -1,16 +1,13 @@
 package com.example.studentsimulationsystem.views.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,73 +19,98 @@ import com.example.studentsimulationsystem.model.Student
 import com.example.studentsimulationsystem.ui.theme.secondary
 import com.example.studentsimulationsystem.ui.theme.spacing
 import com.example.studentsimulationsystem.viewmodel.AdminViewModel
+import com.example.studentsimulationsystem.views.component.ShowDialog
 import com.example.studentsimulationsystem.views.component.StudentSemesterRow
 import com.example.studentsimulationsystem.views.component.StudentYearsRow
 
 @Composable
 fun AdminHome(adminViewModel: AdminViewModel) {
-    LaunchedEffect(key1 = true ){
+    LaunchedEffect(key1 = true) {
         adminViewModel.getListOfStudent()
     }
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(MaterialTheme.spacing.medium),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
-    ) {
+    var showingUpdateScreen by remember {
+        mutableStateOf(false)
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(MaterialTheme.spacing.medium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+        ) {
+            val isLoading by remember {
+                adminViewModel.isLoading
+            }
+            if (isLoading)
+                ShowDialog()
 
-        Text(
-            text = "Select Students Year",
-            fontSize = 16.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
-        )
+            Text(
+                text = "Select Students Year",
+                fontSize = 16.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            )
 
-        val years = adminViewModel.years
-        StudentYearsRow(years)
+            val years = adminViewModel.years
+            StudentYearsRow(years)
 
-        Text(
-            text = "Chose Semester",
-            fontSize = 16.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
-        )
-        val semester = adminViewModel.semester
-        StudentSemesterRow(semester)
+            Text(
+                text = "Chose Semester",
+                fontSize = 16.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            )
+            val semester = adminViewModel.semester
+            StudentSemesterRow(semester)
 
-        Text(
-            text = "Students Result",
-            fontSize = 16.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
-        )
-        val students by adminViewModel.students.observeAsState()
-        students?.let { ShowingListOfStudentResults(it) }
+            Text(
+                text = "Students Result",
+                fontSize = 16.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            )
+            val students by adminViewModel.students.observeAsState()
+            students?.let {
+                ShowingListOfStudentResults(it) { student->
+                    adminViewModel.studentID.value = student.studentID
+                    showingUpdateScreen = !showingUpdateScreen
+                }
+            }
+        }
+        if (showingUpdateScreen)
+            UpdateStudent(viewModel = adminViewModel) {
+                showingUpdateScreen = !showingUpdateScreen
+                adminViewModel.getListOfStudent()
+            }
     }
 }
 
 @Composable
-fun ColumnScope.ShowingListOfStudentResults(students: List<Student>) {
-    LazyColumn(
+fun ColumnScope.ShowingListOfStudentResults(
+    students: List<Student>, onClick: (student: Student) -> Unit
+) {
+    LazyRow(
         modifier = Modifier
             .weight(0.6f)
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
     ) {
         items(items = students) { student ->
-            StudentResultDetails(student = student)
+            StudentResultDetails(student = student) {
+                onClick(it)
+            }
         }
     }
 }
 
 @Composable
 fun StudentResultDetails(
-    student: Student
+    student: Student, onClick: (student: Student) -> Unit
 ) {
     Card(
         Modifier
-            .fillMaxWidth()
-            .height(300.dp)
+            .size(300.dp)
+            .clickable { onClick(student) }
             .padding(bottom = MaterialTheme.spacing.small),
         shape = RoundedCornerShape(MaterialTheme.spacing.extraSmall),
         elevation = 5.dp,
@@ -154,5 +176,38 @@ fun ColumnScope.StudentResultDetailsMainInfoRow(str1: String, str2: String) {
             color = Color(0xFFaaaaaa),
             fontWeight = FontWeight.Bold
         )
+    }
+}
+
+@Composable
+fun UpdateStudent(viewModel: AdminViewModel, onCloseUpdatesScreen: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .background(Color(0xFF000000).copy(0.62f))
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+    ) {
+
+        InsertNewStudent(viewModel, mainText = "Update Student") {
+            onCloseUpdatesScreen()
+        }
+        Button(
+            onClick = {
+                viewModel.updateStudent{
+                    onCloseUpdatesScreen()
+                }
+            },
+            modifier = Modifier
+                .padding(MaterialTheme.spacing.medium)
+                .fillMaxWidth()
+                .weight(0.15f),
+            shape = RoundedCornerShape(MaterialTheme.spacing.small),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF3BE615))
+        ) {
+            Text(
+                text = "Update Student",
+                fontSize = 14.sp, color = Color.White
+            )
+        }
     }
 }
